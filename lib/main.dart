@@ -32,6 +32,9 @@ class MyApp extends ConsumerWidget {
             ],
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => ref.refresh(counterProvider),
+        ),
       ),
     );
   }
