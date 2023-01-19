@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final helloWorldProvider = Provider((_) => 'Hello World');
@@ -7,44 +8,50 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// StreamProviderを使ってみる
-final userProvider = StreamProvider((ref) {
-  Stream<dynamic> getNumbers() async* {
-    await Future.delayed(const Duration(seconds: 1));
-    yield 'Are You Ready?';
+// listenを使ってみる
+final userProvider = StateNotifierProvider<UserNotifier, User>((ref) => UserNotifier());
 
-    await Future.delayed(const Duration(seconds: 1));
-    yield 3;
+class UserNotifier extends StateNotifier<User> {
+  UserNotifier() : super(const User());
 
-    await Future.delayed(const Duration(seconds: 1));
-    yield 2;
-
-    await Future.delayed(const Duration(seconds: 1));
-    yield 1;
+  void changeName() {
+    state = state.copyWith(name: '花子');
   }
 
-  return getNumbers();
-});
+  void changeAge() {
+    state = state.copyWith(age: 10);
+  }
+}
 
 class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue asyncValue = ref.watch(userProvider); //Stream の現在のステートを同期的に取得する
-    Stream userStream = ref.watch(userProvider.stream);
-    userStream.listen((event) {
-      // print(event);
+    final listenUser = ref.listen(userProvider.select((user) => user.name),
+        (String? previousName, String newName) {
+      print('The user name changed $newName');
     });
-    Future userFuture = ref.watch(userProvider.future);
-    userFuture.then((value) => print(value));
 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Example'),
         ),
-        body: Center(),
+        body: Center(
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () => ref.read(userProvider.notifier).changeName(),
+                child: const Text('Name'),
+              ),
+              ElevatedButton(
+                onPressed: () => ref.read(userProvider.notifier).changeAge(),
+                child: const Text('age'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
