@@ -31,19 +31,20 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue asyncValue = ref.watch(userProvider);
+    AsyncValue asyncValue = ref.watch(userProvider); //Stream の現在のステートを同期的に取得する
+    Stream userStream = ref.watch(userProvider.stream);
+    userStream.listen((event) {
+      // print(event);
+    });
+    Future userFuture = ref.watch(userProvider.future);
+    userFuture.then((value) => print(value));
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Example'),
         ),
-        body: Center(
-          child: asyncValue.when(
-            data: (data) => Text(data.toString()),
-            error: (err, _) => Text(err.toString()),
-            loading: () => const CircularProgressIndicator(),
-          ),
-        ),
+        body: Center(),
       ),
     );
   }
