@@ -7,35 +7,30 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// ref.listenを使ってみる
-final counterProvider = StateNotifierProvider<Counter2, int>((_) => Counter2());
+final counterProvider = StateProvider((ref) => 0);
 
-class Counter2 extends StateNotifier<int> {
-  Counter2() : super(0);
-
-  void increment() {
-    state = 1;
-  }
-}
 
 class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final test = ref.watch(counterProvider);
+    final counter = ref.watch(counterProvider);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Example'),
         ),
         body: Center(
-          child: Text(test.toString()),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            ref.read(counterProvider.notifier).increment();
-          },
+          child: Column(
+            children: [
+              Text(counter.toString()),
+              ElevatedButton(
+                onPressed: () => ref.read(counterProvider.notifier).state++,
+                child: const Text('button'),
+              )
+            ],
+          ),
         ),
       ),
     );
