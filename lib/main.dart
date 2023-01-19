@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_practice/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final helloWorldProvider = Provider((_) => 'Hello World');
@@ -8,19 +7,24 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// listenを使ってみる
-final userProvider = StateNotifierProvider<UserNotifier, User>((ref) => UserNotifier());
+final cityProvider = StateProvider((ref) => '');
 
-class UserNotifier extends StateNotifier<User> {
-  UserNotifier() : super(const User());
+// プロバイダのステートを組み合わせる
+final weatherProvider = FutureProvider((ref) {
+  final city = ref.watch(cityProvider);
+  return fetchWeather(city);
+});
 
-  void changeName() {
-    state = state.copyWith(name: '花子');
+String fetchWeather(String city) {
+  switch (city) {
+    case 'London':
+      return '晴れ';
+    case 'Paris':
+      return '曇り';
+    case 'Roma':
+      return '雨';
   }
-
-  void changeAge() {
-    state = state.copyWith(age: 10);
-  }
+  return ' 各都市の天気はなんでしょう?';
 }
 
 class MyApp extends ConsumerWidget {
@@ -28,29 +32,34 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final listenUser = ref.listen(userProvider.select((user) => user.name),
-        (String? previousName, String newName) {
-      print('The user name changed $newName');
-    });
-
+    AsyncValue weather = ref.watch(weatherProvider);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Example'),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              ElevatedButton(
-                onPressed: () => ref.read(userProvider.notifier).changeName(),
-                child: const Text('Name'),
-              ),
-              ElevatedButton(
-                onPressed: () => ref.read(userProvider.notifier).changeAge(),
-                child: const Text('age'),
-              ),
-            ],
-          ),
+        body: Column(
+          children: [
+            weather.when(
+              data: (value) {
+                return Text(value);
+              },
+              error: (err, stack) => Text('Error: $err'),
+              loading: () => const CircularProgressIndicator(),
+            ),
+            ElevatedButton(
+              onPressed: () => ref.read(cityProvider.notifier).state = 'London',
+              child: const Text('London'),
+            ),
+            ElevatedButton(
+              onPressed: () => ref.read(cityProvider.notifier).state = 'Paris',
+              child: const Text('Paris'),
+            ),
+            ElevatedButton(
+              onPressed: () => ref.refresh(cityProvider),
+              child: const Text('Refresh'),
+            ),
+          ],
         ),
       ),
     );
