@@ -18,6 +18,20 @@ class Todo {
 
 class TodoList extends StateNotifier<List<Todo>> {
   TodoList([List<Todo>? initialTodos]) : super(initialTodos ?? []);
+
+  void toggle(String id) {
+    state = [
+      for (final todo in state)
+        if (todo.id == id)
+          Todo(
+            id: todo.id,
+            isCompleted: !todo.isCompleted,
+            description: todo.description,
+          )
+        else
+          todo,
+    ];
+  }
 }
 
 enum Filter {
@@ -67,6 +81,11 @@ class MyApp extends ConsumerWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return Row(
                     children: [
+                      Checkbox(
+                        value: filteredTodoList[index].isCompleted,
+                        onChanged: (value) =>
+                            ref.read(todoListProvider.notifier).toggle(filteredTodoList[index].id),
+                      ),
                       Text(filteredTodoList[index].description),
                     ],
                   );
