@@ -9,6 +9,9 @@ class Top extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gender = ref.watch(genderProvider);
+    final heightController = TextEditingController();
+    final wightController = TextEditingController();
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -59,8 +62,18 @@ class Top extends ConsumerWidget {
                   ),
                 ),
                 TextField(
-                  onChanged: (value) => {ref.read(heightProvider.notifier).state = value},
+                  controller: heightController,
+                  onChanged: (value) => {
+                    ref.read(heightProvider.notifier).state = value,
+                    heightController.text = ref.watch(heightProvider.notifier).state,
+                    heightController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: heightController.text.length),
+                    ),
+                  },
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
+                    hintText: '0',
+                    hintStyle: TextStyle(color: Colors.white),
                     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                   ),
@@ -85,8 +98,18 @@ class Top extends ConsumerWidget {
                   ),
                 ),
                 TextField(
-                  onChanged: (value) => {ref.read(weightProvider.notifier).state = value},
+                  controller: wightController,
+                  onChanged: (value) => {
+                    ref.read(weightProvider.notifier).state = value,
+                    wightController.text = ref.watch(weightProvider.notifier).state,
+                    wightController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: wightController.text.length),
+                    ),
+                  },
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
+                    hintText: '0',
+                    hintStyle: TextStyle(color: Colors.white),
                     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                   ),
@@ -105,8 +128,15 @@ class Top extends ConsumerWidget {
               backgroundColor: Colors.pink,
             ),
             child: const Text('計算する'),
-          )
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.refresh),
+        onPressed: () {
+          ref.refresh(heightProvider);
+          ref.refresh(weightProvider);
+        },
       ),
     );
   }
