@@ -10,26 +10,30 @@ class Top extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gender = ref.watch(genderProvider);
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('BMI CALCULATOR'),
       ),
       body: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                 style: OutlinedButton.styleFrom(
-                  backgroundColor: gender == Gender.male ? Colors.pink : Colors.blue,
+                  backgroundColor: gender == Gender.male ? Colors.pink : Colors.grey,
                 ),
                 onPressed: () {
                   ref.read(genderProvider.notifier).state = Gender.male;
                 },
                 child: const Text('MALE'),
               ),
+              Container(
+                width: 24,
+              ),
               ElevatedButton(
                 style: OutlinedButton.styleFrom(
-                  backgroundColor: gender == Gender.female ? Colors.pink : Colors.blue,
+                  backgroundColor: gender == Gender.female ? Colors.pink : Colors.grey,
                 ),
                 onPressed: () {
                   ref.read(genderProvider.notifier).state = Gender.female;
@@ -39,32 +43,52 @@ class Top extends ConsumerWidget {
             ],
           ),
           Container(
+            width: 120,
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                const Text('身長 (cm)'),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    '身長 (cm)',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 TextField(
                   onChanged: (value) => {ref.read(heightProvider.notifier).state = value},
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                  decoration: const InputDecoration(
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                   ),
                 ),
               ],
             ),
           ),
           Container(
+            width: 120,
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                const Text('体重 (kg)'),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    '体重 (kg)',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 TextField(
                   onChanged: (value) => {ref.read(weightProvider.notifier).state = value},
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                  decoration: const InputDecoration(
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                   ),
                 ),
               ],

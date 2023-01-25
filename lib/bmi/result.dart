@@ -10,8 +10,9 @@ class Result extends ConsumerWidget {
     final height = ref.watch(heightProvider);
     final weight = ref.watch(weightProvider);
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('BMI CALCULATOR Result'),
+        title: const Text('BMI CALCULATOR RESULT'),
       ),
       body: Center(
         child: Column(
@@ -19,16 +20,31 @@ class Result extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Result',
-              style: TextStyle(fontSize: 24),
+              '結果発表',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Text(ref.watch(genderProvider).name),
+            Text(
+              '性別: ${ref.watch(genderProvider).name}',
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Text(
               ref.watch(bmiCalculatorProvider.notifier).getResult(
                     int.parse(height),
                     int.parse(weight),
                   ),
-              style: const TextStyle(fontSize: 48),
+              style: const TextStyle(
+                fontSize: 48,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -37,7 +53,7 @@ class Result extends ConsumerWidget {
               style: OutlinedButton.styleFrom(
                 backgroundColor: Colors.pink,
               ),
-              child: const Text('再計算する'),
+              child: const Text('再計算'),
             )
           ],
         ),
