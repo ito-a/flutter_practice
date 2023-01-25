@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_practice/bmi/provider.dart';
 import 'package:flutter_practice/bmi/result.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +8,7 @@ class Top extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final gender = ref.watch(genderProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('BMI CALCULATOR'),
@@ -18,11 +19,21 @@ class Top extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: gender == Gender.male ? Colors.pink : Colors.blue,
+                ),
+                onPressed: () {
+                  ref.read(genderProvider.notifier).state = Gender.male;
+                },
                 child: const Text('MALE'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: gender == Gender.female ? Colors.pink : Colors.blue,
+                ),
+                onPressed: () {
+                  ref.read(genderProvider.notifier).state = Gender.female;
+                },
                 child: const Text('FEMALE'),
               ),
             ],
@@ -33,6 +44,7 @@ class Top extends ConsumerWidget {
               children: [
                 const Text('身長 (cm)'),
                 TextField(
+                  onChanged: (value) => {ref.read(heightProvider.notifier).state = value},
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -48,6 +60,7 @@ class Top extends ConsumerWidget {
               children: [
                 const Text('体重 (kg)'),
                 TextField(
+                  onChanged: (value) => {ref.read(weightProvider.notifier).state = value},
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -61,7 +74,7 @@ class Top extends ConsumerWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Result()),
+                MaterialPageRoute(builder: (context) => const Result()),
               );
             },
             style: OutlinedButton.styleFrom(

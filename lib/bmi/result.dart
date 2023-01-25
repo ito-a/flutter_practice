@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_practice/bmi/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Result extends ConsumerWidget {
@@ -7,6 +7,8 @@ class Result extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final height = ref.watch(heightProvider);
+    final weight = ref.watch(weightProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('BMI CALCULATOR Result'),
@@ -20,9 +22,13 @@ class Result extends ConsumerWidget {
               'Result',
               style: TextStyle(fontSize: 24),
             ),
-            const Text(
-              '20.8',
-              style: TextStyle(fontSize: 48),
+            Text(ref.watch(genderProvider).name),
+            Text(
+              ref.watch(bmiCalculatorProvider.notifier).getResult(
+                    int.parse(height),
+                    int.parse(weight),
+                  ),
+              style: const TextStyle(fontSize: 48),
             ),
             ElevatedButton(
               onPressed: () {
