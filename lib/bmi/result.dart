@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class Result extends ConsumerWidget {
   const Result({Key? key}) : super(key: key);
 
+  static const routeName = 'result_page';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = ref.watch(heightProvider);

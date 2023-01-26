@@ -23,6 +23,7 @@ class Top extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
+                key: const Key('gender_male_button'),
                 style: OutlinedButton.styleFrom(
                   backgroundColor: gender == Gender.male ? Colors.pink : Colors.grey,
                 ),
@@ -35,6 +36,7 @@ class Top extends ConsumerWidget {
                 width: 24,
               ),
               ElevatedButton(
+                key: const Key('gender_female_button'),
                 style: OutlinedButton.styleFrom(
                   backgroundColor: gender == Gender.female ? Colors.pink : Colors.grey,
                 ),
@@ -62,6 +64,7 @@ class Top extends ConsumerWidget {
                   ),
                 ),
                 TextField(
+                  key: const ValueKey('height_text'),
                   controller: heightController,
                   onChanged: (value) => {
                     ref.read(heightProvider.notifier).state = value,
@@ -98,6 +101,7 @@ class Top extends ConsumerWidget {
                   ),
                 ),
                 TextField(
+                  key: const ValueKey('weight_text'),
                   controller: wightController,
                   onChanged: (value) => {
                     ref.read(weightProvider.notifier).state = value,
@@ -118,10 +122,11 @@ class Top extends ConsumerWidget {
             ),
           ),
           ElevatedButton(
+            key: const Key('calculator_button'),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => const Result()),
+                Result.routeName,
               );
             },
             style: OutlinedButton.styleFrom(
