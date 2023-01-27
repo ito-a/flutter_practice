@@ -15,16 +15,18 @@ final heightProvider = StateProvider((ref) => '0');
 final weightProvider = StateProvider((ref) => '0');
 
 final bmiCalculatorProvider =
-    StateNotifierProvider<BmiCalculator, String>((ref) => BmiCalculator());
+    StateNotifierProvider<BmiCalculatorController, String>((ref) => BmiCalculatorController());
 
-class BmiCalculator extends StateNotifier<String> {
-  BmiCalculator() : super('');
+class BmiCalculatorController extends StateNotifier<String> {
+  BmiCalculatorController() : super("");
 
   String getResult(int height, int weight) {
-    debugPrint(height.toString());
-    debugPrint(weight.toString());
     double bmi;
     bmi = weight / pow(height / 100, 2);
     return bmi.toStringAsFixed(1);
+  }
+
+  void input(String text) {
+    state = text;
   }
 }
